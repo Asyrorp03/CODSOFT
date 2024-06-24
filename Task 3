@@ -1,0 +1,73 @@
+import java.io.*;
+import java.util.Scanner;
+class BankAccount 
+{
+    private double balance;
+    public BankAccount(double initialBalance)
+    {
+        this.balance = initialBalance;
+    }
+    public double getBalance() 
+    {
+        return balance;
+    }
+    public void deposit(double amount) 
+    {
+        if (amount > 0) balance += amount;
+    }
+    public boolean withdraw(double amount) 
+    {
+        if (amount > 0 && amount <= balance)
+        {
+            balance -= amount;
+            return true;
+        }
+        return false;
+    }
+}
+class ATM 
+{
+    private BankAccount account;
+    private Scanner sc = new Scanner(System.in);
+    public ATM(BankAccount account) {
+        this.account = account;
+    }
+    public void displayMenu() 
+    {
+        while (true) {
+            System.out.println("1. Withdraw\n2. Deposit\n3. Check Balance\n4. Exit");
+            switch (sc.nextInt())
+            {
+                case 1 -> withdraw();
+                case 2 -> deposit();
+                case 3 -> System.out.println("Balance: " + account.getBalance());
+                case 4 -> 
+                { 
+                    return; 
+                }
+                default -> System.out.println("Invalid choice. Try again.");
+            }
+        }
+    }
+    private void withdraw() 
+    {
+        System.out.print("Enter amount to withdraw: ");
+        if (account.withdraw(sc.nextDouble())) 
+        System.out.println("Withdraw successful.");
+        else 
+        System.out.println("Insufficient balance.");
+    }
+    private void deposit()
+    {
+        System.out.print("Enter amount to deposit: ");
+        account.deposit(sc.nextDouble());
+        System.out.println("Deposit successful.");
+    }
+}
+public class ATMMachine
+ {
+    public static void main(String[] args)
+    {
+        new ATM(new BankAccount(1000.0)).displayMenu();
+    }
+}
